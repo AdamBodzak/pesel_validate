@@ -1,6 +1,9 @@
 /**
- * Registration form: decodes birth date and gender from the typed PESEL (POST /pesel/decode)
- * and offers to fill the fields in. It never overwrites the fields on its own.
+ * Registration form behaviour:
+ * - PESEL hint: decodes birth date and gender (POST /pesel/decode) and offers to fill the fields in,
+ *   never overwriting them on its own,
+ * - clears stale server-side errors of a field as soon as the user edits it,
+ * - blocks double submission.
  *
  * All PESEL rules and texts come from the server - this component only triggers the request
  * and displays the response. The form works without it (progressive enhancement).
@@ -33,6 +36,20 @@ export default ({ decodeUrl, csrfToken, birthDateId, genderName }) => ({
         // Dates are compared as "Y-m-d" strings - the same format as the date input value
         return (this.birthDate !== '' && this.birthDate !== this.decoded.birthDate)
             || (this.gender !== '' && this.gender !== this.decoded.gender);
+    },
+
+    /**
+     * Server-side errors describe the previously submitted value - once the field is edited they are stale.
+     * The server validates everything again on the next submission.
+     */
+    clearServerErrors(field) {
+        const row = field.closest('[data-form-row]');
+        if (!row) {
+            return;
+        }
+
+        row.querySelectorAll('[data-form-errors]').forEach((errors) => errors.remove());
+        row.querySelectorAll('[aria-invalid="true"]').forEach((input) => input.removeAttribute('aria-invalid'));
     },
 
     syncFields() {
@@ -85,10 +102,13 @@ export default ({ decodeUrl, csrfToken, birthDateId, genderName }) => ({
             birthDateInput.value = this.decoded.birthDate;
         }
 
-        this.$root.querySelectorAll(`input[name="${genderName}"]`).forEach((radio) => {
+        const genderRadios = this.$root.querySelectorAll(`input[name="${genderName}"]`);
+        genderRadios.forEach((radio) => {
             radio.checked = radio.value === this.decoded.gender;
         });
 
+        // Programmatic changes do not fire input/change events - clear the errors of the filled fields explicitly
+        [birthDateInput, genderRadios[0]].filter(Boolean).forEach((field) => this.clearServerErrors(field));
         this.syncFields();
     },
 });

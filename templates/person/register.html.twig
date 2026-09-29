@@ -3,7 +3,7 @@
 {% block title %}{{ 'person.register.title'|trans }} – {{ parent() }}{% endblock %}
 
 {% block body %}
-    {% set pesel_hint_config = {
+    {% set form_config = {
         decodeUrl: path('pesel_decode'),
         csrfToken: csrf_token(pesel_decode_csrf_token_id),
         birthDateId: form.birthDate.vars.id,
@@ -16,8 +16,9 @@
         {# novalidate: validation messages come from the server, in Polish and consistent with the domain rules #}
         {{ form_start(form, {attr: {
             novalidate: 'novalidate',
-            'x-data': 'peselHint(' ~ pesel_hint_config|json_encode ~ ')',
-            'x-on:change': 'syncFields()',
+            'x-data': 'registerPersonForm(' ~ form_config|json_encode ~ ')',
+            'x-on:input': 'clearServerErrors($event.target)',
+            'x-on:change': 'clearServerErrors($event.target); syncFields()',
             'x-on:submit': 'submitting = true',
         }}) }}
             {{ form_errors(form) }}

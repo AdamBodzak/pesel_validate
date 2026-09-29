@@ -2,7 +2,8 @@
 {% use 'form_div_layout.html.twig' %}
 
 {%- block form_row -%}
-    <div class="mb-5">
+    {# data-form-row / data-form-errors let the frontend clear stale server errors when the field is edited #}
+    <div class="mb-5" data-form-row>
         {{- form_label(form) -}}
         {{- form_widget(form) -}}
         {{- form_errors(form) -}}
@@ -17,10 +18,10 @@
 {%- endblock form_label -%}
 
 {%- block form_widget_simple -%}
-    {%- set state_class = errors|length > 0
-        ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
-        : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-200' -%}
-    {%- set attr = attr|merge({class: ('block w-full rounded-md border bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 ' ~ state_class ~ ' ' ~ attr.class|default(''))|trim}) -%}
+    {%- if errors|length > 0 -%}
+        {%- set attr = attr|merge({'aria-invalid': 'true'}) -%}
+    {%- endif -%}
+    {%- set attr = attr|merge({class: ('block w-full rounded-md border border-slate-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 aria-invalid:border-red-400 aria-invalid:focus:border-red-500 aria-invalid:focus:ring-red-200 ' ~ attr.class|default(''))|trim}) -%}
     {{- parent() -}}
 {%- endblock form_widget_simple -%}
 
@@ -38,7 +39,7 @@
 
 {%- block form_errors -%}
     {%- if errors|length > 0 -%}
-        <ul class="mt-1 space-y-1 text-sm text-red-600">
+        <ul class="mt-1 space-y-1 text-sm text-red-600" data-form-errors>
             {%- for error in errors -%}
                 <li>{{ error.message }}</li>
             {%- endfor -%}
