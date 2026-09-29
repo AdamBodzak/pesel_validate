@@ -1,0 +1,27 @@
+.DEFAULT_GOAL := help
+
+DOCKER_COMPOSE = docker compose
+PHP = $(DOCKER_COMPOSE) exec php
+
+export HOST_UID := $(shell id -u)
+export HOST_GID := $(shell id -g)
+
+.PHONY: help build up down sh composer
+
+help: ## Show available commands
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
+
+build: ## Build Docker images
+	$(DOCKER_COMPOSE) build
+
+up: ## Start containers in the background
+	$(DOCKER_COMPOSE) up -d
+
+down: ## Stop and remove containers
+	$(DOCKER_COMPOSE) down
+
+sh: ## Open a shell in the PHP container
+	$(PHP) sh
+
+composer: ## Run Composer, e.g. make composer c="require symfony/uid"
+	$(PHP) composer $(c)
