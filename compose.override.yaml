@@ -1,0 +1,15 @@
+# Development-only services and settings.
+# Loaded automatically by `docker compose`; on production run `docker compose -f compose.yaml ...` to skip it.
+services:
+  database:
+    ports:
+      - "${DB_PORT:-5432}:5432"
+
+  adminer:
+    image: adminer:5
+    environment:
+      ADMINER_DEFAULT_SERVER: database
+    ports:
+      - "${ADMINER_PORT:-8081}:8080"
+    depends_on:
+      - database
