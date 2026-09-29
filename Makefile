@@ -30,7 +30,7 @@ composer: ## Run Composer, e.g. make composer c="require symfony/uid"
 console: ## Run Symfony console, e.g. make console c="about"
 	$(PHP) bin/console $(c)
 
-test: ## Run PHPUnit tests, e.g. make test c="--filter PeselTest"
+test: ## Run PHPUnit tests, e.g. make test c="--filter PeselValueObjectTest"
 	$(PHP) bin/phpunit $(c)
 
 test-db: ## Create and migrate the test database
