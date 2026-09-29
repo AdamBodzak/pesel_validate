@@ -8,6 +8,8 @@ use App\Person\Model\Enum\GenderEnum;
 use App\Person\Model\Enum\PeselErrorEnum;
 use App\Person\Model\Exception\InvalidPeselException;
 use App\Person\Model\ValueObject\PeselValueObject;
+use DateTimeImmutable;
+use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 
 final class PeselValueObjectTest extends TestCase
@@ -107,6 +109,24 @@ final class PeselValueObjectTest extends TestCase
         } catch (InvalidPeselException $exception) {
             self::assertStringNotContainsString('44051401358', $exception->getMessage());
         }
+    }
+
+    public function testMatchesBirthDateComparesDateOnly(): void
+    {
+        $pesel = PeselValueObject::fromString('44051401359');
+
+        self::assertTrue($pesel->matchesBirthDate(new DateTimeImmutable('1944-05-14')));
+        self::assertTrue($pesel->matchesBirthDate(new DateTimeImmutable('1944-05-14 23:59:59', new DateTimeZone('UTC'))));
+        self::assertFalse($pesel->matchesBirthDate(new DateTimeImmutable('1944-05-15')));
+        self::assertFalse($pesel->matchesBirthDate(new DateTimeImmutable('2044-05-14')));
+    }
+
+    public function testMatchesGender(): void
+    {
+        $pesel = PeselValueObject::fromString('44051401359');
+
+        self::assertTrue($pesel->matchesGender(GenderEnum::Male));
+        self::assertFalse($pesel->matchesGender(GenderEnum::Female));
     }
 
     public function testEqualsComparesNormalizedValue(): void

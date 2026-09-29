@@ -75,6 +75,19 @@ final readonly class PeselValueObject
     }
 
     /**
+     * Birth date is a calendar date - only the date part is compared, time and time zone are ignored.
+     */
+    public function matchesBirthDate(DateTimeImmutable $birthDate): bool
+    {
+        return $this->birthDate->format('Y-m-d') === $birthDate->format('Y-m-d');
+    }
+
+    public function matchesGender(GenderEnum $gender): bool
+    {
+        return $this->gender === $gender;
+    }
+
+    /**
      * Removes all whitespace, including Unicode spaces (e.g. non-breaking space from copy-paste).
      * Invalid UTF-8 input makes preg_replace() return null - it is then treated as an invalid format.
      */
