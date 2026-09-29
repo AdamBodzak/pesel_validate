@@ -23,6 +23,15 @@ make console c="doctrine:migrations:migrate --no-interaction" # schemat bazy
 
 Pierwsze budowanie assetów trwa kilkanaście sekund - postęp: `docker compose logs -f node`. Porty można zmienić zmiennymi `HTTP_PORT`, `ADMINER_PORT` i `DB_PORT`, np. `HTTP_PORT=8080 make up`.
 
+### Rozwiązywanie problemów
+
+| Objaw | Rozwiązanie |
+|-------|-------------|
+| `make up`: `port is already allocated` (np. lokalny PostgreSQL na 5432) | zmień port, np. `DB_PORT=5433 make up` (analogicznie `HTTP_PORT`, `ADMINER_PORT`) |
+| strona zwraca błąd o brakującym `entrypoints.json` | assety jeszcze się budują - poczekaj na `webpack compiled successfully` w `docker compose logs -f node` |
+| `permission denied` przy dostępie do Dockera | uruchamiaj komendy jako użytkownik z grupy `docker` (albo przez `sudo`) |
+| brak `make` | wszystkie komendy z `Makefile` można wykonać bezpośrednio przez `docker compose`, np. `docker compose exec php composer install` |
+
 ## Komendy Makefile
 
 | Komenda                 | Opis |
