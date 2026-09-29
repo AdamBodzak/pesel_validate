@@ -37,6 +37,18 @@ Pierwsze budowanie assetów trwa kilkanaście sekund - postęp: `docker compose 
 | `make test-db`          | utworzenie i migracja bazy testowej |
 | `make npm c="…"`        | npm w jednorazowym kontenerze Node |
 | `make assets`           | produkcyjne zbudowanie assetów |
+| `make cs` / `make cs-fix` | sprawdzenie / poprawienie stylu kodu (PHP-CS-Fixer) |
+| `make stan`             | analiza statyczna (PHPStan) |
+| `make qa`               | wszystkie kontrole jakości: styl, analiza statyczna i testy |
+
+## Jakość kodu
+
+```bash
+make qa   # styl kodu + analiza statyczna + testy
+```
+
+- **PHP-CS-Fixer** - standard `@Symfony` i `@PHP82Migration`, wymuszone `declare(strict_types=1)` oraz ścisłe porównania (`.php-cs-fixer.dist.php`).
+- **PHPStan** - poziom 8 z rozszerzeniami dla Symfony (typy usług z kontenera), Doctrine (mapowanie encji) i PHPUnit (`phpstan.dist.neon`); bez pliku bazowego - cały kod przechodzi analizę bez wyjątków.
 
 ## Testy
 

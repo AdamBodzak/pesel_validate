@@ -7,7 +7,7 @@ NODE = $(DOCKER_COMPOSE) run --rm node
 export HOST_UID := $(shell id -u)
 export HOST_GID := $(shell id -g)
 
-.PHONY: help build up down sh composer console test test-db npm assets cs cs-fix
+.PHONY: help build up down sh composer console test test-db npm assets cs cs-fix stan qa
 
 help: ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -48,3 +48,9 @@ cs: ## Check code style without changing files (PHP-CS-Fixer)
 
 cs-fix: ## Fix code style (PHP-CS-Fixer)
 	$(PHP) vendor/bin/php-cs-fixer fix
+
+stan: ## Run static analysis (PHPStan); warms up the dev cache for the Symfony extension first
+	$(PHP) bin/console cache:warmup --env=dev
+	$(PHP) vendor/bin/phpstan analyse --memory-limit=1G
+
+qa: cs stan test ## Run all quality checks: code style, static analysis and tests

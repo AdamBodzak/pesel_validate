@@ -22,7 +22,7 @@ final class DecodePeselControllerTest extends WebTestCase
 
     public function testDecodesBirthDateAndGenderWithoutEchoingPesel(): void
     {
-        $this->decode(json_encode(['pesel' => '440 514 013 59']), $this->csrfToken());
+        $this->decode(json_encode(['pesel' => '440 514 013 59'], JSON_THROW_ON_ERROR), $this->csrfToken());
 
         self::assertResponseIsSuccessful();
         self::assertSame([
@@ -38,7 +38,7 @@ final class DecodePeselControllerTest extends WebTestCase
      */
     public function testReturnsValidationMessageForInvalidPesel(string $pesel, string $expectedMessage): void
     {
-        $this->decode(json_encode(['pesel' => $pesel]), $this->csrfToken());
+        $this->decode(json_encode(['pesel' => $pesel], JSON_THROW_ON_ERROR), $this->csrfToken());
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertSame(['message' => $expectedMessage], $this->responseJson());
@@ -68,7 +68,7 @@ final class DecodePeselControllerTest extends WebTestCase
         $this->client->submit($form);
         self::assertResponseRedirects('/persons');
 
-        $this->decode(json_encode(['pesel' => '44051401359']), $this->csrfToken());
+        $this->decode(json_encode(['pesel' => '44051401359'], JSON_THROW_ON_ERROR), $this->csrfToken());
 
         self::assertResponseIsSuccessful();
         self::assertSame('1944-05-14', $this->responseJson()['birthDate']);
@@ -79,7 +79,7 @@ final class DecodePeselControllerTest extends WebTestCase
      */
     public function testRejectsRequestWithoutValidCsrfToken(?string $token): void
     {
-        $this->decode(json_encode(['pesel' => '44051401359']), $token);
+        $this->decode(json_encode(['pesel' => '44051401359'], JSON_THROW_ON_ERROR), $token);
 
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         self::assertArrayHasKey('message', $this->responseJson());

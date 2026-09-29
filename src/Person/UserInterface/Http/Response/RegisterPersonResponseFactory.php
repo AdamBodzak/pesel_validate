@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Person\UserInterface\Http\Response;
 
+use App\Person\UserInterface\Form\RegisterPersonFormData;
 use App\Person\UserInterface\Http\Controller\DecodePeselController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,6 +24,9 @@ final class RegisterPersonResponseFactory
     ) {
     }
 
+    /**
+     * @param FormInterface<RegisterPersonFormData> $form
+     */
     public function form(FormInterface $form): Response
     {
         // 422 lets the browser and tests distinguish a rejected submission from the initial page

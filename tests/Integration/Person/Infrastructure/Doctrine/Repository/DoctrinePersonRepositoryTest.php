@@ -28,8 +28,11 @@ final class DoctrinePersonRepositoryTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $this->entityManager = self::getContainer()->get('doctrine')->getManager();
-        $this->repository = new DoctrinePersonRepository($this->entityManager);
+        $entityManager = self::getContainer()->get('doctrine')->getManager();
+        self::assertInstanceOf(EntityManagerInterface::class, $entityManager);
+
+        $this->entityManager = $entityManager;
+        $this->repository = new DoctrinePersonRepository($entityManager);
     }
 
     public function testSavesAndRestoresPerson(): void

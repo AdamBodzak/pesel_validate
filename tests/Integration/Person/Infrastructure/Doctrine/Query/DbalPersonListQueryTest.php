@@ -26,8 +26,9 @@ final class DbalPersonListQueryTest extends KernelTestCase
     {
         self::bootKernel();
 
-        /** @var EntityManagerInterface $entityManager */
         $entityManager = self::getContainer()->get('doctrine')->getManager();
+        self::assertInstanceOf(EntityManagerInterface::class, $entityManager);
+
         $this->repository = new DoctrinePersonRepository($entityManager);
         $this->query = new DbalPersonListQuery($entityManager->getConnection());
     }

@@ -136,7 +136,10 @@ final class RegisterPersonControllerTest extends WebTestCase
 
     private function field(Form $form, string $field): FormField
     {
-        return $form[sprintf('%s[%s]', self::FORM_NAME, $field)];
+        $formField = $form->get(sprintf('%s[%s]', self::FORM_NAME, $field));
+        self::assertInstanceOf(FormField::class, $formField);
+
+        return $formField;
     }
 
     private function assertRejectedWith(string ...$messages): void
