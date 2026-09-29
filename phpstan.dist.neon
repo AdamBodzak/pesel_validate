@@ -1,0 +1,15 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+        - migrations
+    tmpDir: var/phpstan
+
+    # phpstan/phpstan-symfony: real service types from the compiled container (requires a warmed-up dev cache)
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+
+    # phpstan/phpstan-doctrine: entity mapping (XML) and repository types from the real EntityManager
+    doctrine:
+        objectManagerLoader: tests/object-manager.php
