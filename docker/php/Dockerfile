@@ -6,7 +6,7 @@ ARG HOST_GID=1000
 COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
-RUN install-php-extensions intl opcache zip
+RUN install-php-extensions intl opcache pdo_pgsql zip
 
 COPY conf.d/app.ini /usr/local/etc/php/conf.d/zz-app.ini
 
