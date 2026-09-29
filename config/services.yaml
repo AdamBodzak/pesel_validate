@@ -18,6 +18,7 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/*/Model/'
+            - '../src/*/Infrastructure/Doctrine/Type/'
             - '../src/Kernel.php'
 
     Psr\Clock\ClockInterface: '@App\Shared\Infrastructure\Clock\SystemClock'

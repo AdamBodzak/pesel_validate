@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Person\Model\Entity\PersonEntity" table="person">
+        <unique-constraints>
+            <unique-constraint name="uniq_person_pesel" columns="pesel"/>
+        </unique-constraints>
+
+        <indexes>
+            <index name="idx_person_created_at" columns="created_at"/>
+        </indexes>
+
+        <id name="id" type="person_id"/>
+
+        <field name="firstName" column="first_name" type="string" length="100"/>
+        <field name="lastName" column="last_name" type="string" length="100"/>
+        <field name="pesel" column="pesel" type="pesel" length="11">
+            <options>
+                <option name="fixed">true</option>
+            </options>
+        </field>
+        <field name="birthDate" column="birth_date" type="date_immutable"/>
+        <field name="gender" column="gender" type="string" length="6" enum-type="App\Person\Model\Enum\GenderEnum"/>
+        <field name="createdAt" column="created_at" type="datetime_immutable"/>
+    </entity>
+</doctrine-mapping>
