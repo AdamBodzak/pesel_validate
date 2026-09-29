@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}{{ 'app.name'|trans }}{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+        <header class="border-b border-slate-200 bg-white">
+            <div class="mx-auto max-w-4xl px-4 py-4">
+                <span class="text-lg font-semibold">{{ 'app.name'|trans }}</span>
+            </div>
+        </header>
+
+        <main class="mx-auto max-w-4xl px-4 py-8">
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div
+                        x-data="{ open: true }"
+                        x-show="open"
+                        role="alert"
+                        class="mb-6 flex items-start justify-between rounded-lg border px-4 py-3 {{ type == 'success' ? 'border-green-200 bg-green-50 text-green-800' : 'border-red-200 bg-red-50 text-red-800' }}"
+                    >
+                        <p>{{ message|trans }}</p>
+                        <button
+                            type="button"
+                            class="ml-4 leading-none opacity-70 hover:opacity-100"
+                            aria-label="{{ 'app.flash.close'|trans }}"
+                            @click="open = false"
+                        >&times;</button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </main>
+    </body>
+</html>

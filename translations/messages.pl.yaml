@@ -1,0 +1,4 @@
+app:
+    name: Walidator PESEL
+    flash:
+        close: Zamknij
