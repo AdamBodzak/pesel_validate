@@ -6,7 +6,7 @@ PHP = $(DOCKER_COMPOSE) exec php
 export HOST_UID := $(shell id -u)
 export HOST_GID := $(shell id -g)
 
-.PHONY: help build up down sh composer console test
+.PHONY: help build up down sh composer console test test-db
 
 help: ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -31,3 +31,7 @@ console: ## Run Symfony console, e.g. make console c="about"
 
 test: ## Run PHPUnit tests, e.g. make test c="--filter PeselTest"
 	$(PHP) bin/phpunit $(c)
+
+test-db: ## Create and migrate the test database
+	$(PHP) bin/console doctrine:database:create --env=test --if-not-exists
+	$(PHP) bin/console doctrine:migrations:migrate --env=test --no-interaction
