@@ -6,3 +6,8 @@
 
 @source "../../templates";
 @source "..";
+
+/* Hides Alpine.js elements until the component is initialized (prevents a flash of hidden content) */
+[x-cloak] {
+    display: none !important;
+}

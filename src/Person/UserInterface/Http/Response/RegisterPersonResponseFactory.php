@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Person\UserInterface\Http\Response;
 
+use App\Person\UserInterface\Http\Controller\DecodePeselController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,10 @@ final class RegisterPersonResponseFactory
             : Response::HTTP_OK;
 
         return new Response(
-            $this->twig->render('person/register.html.twig', ['form' => $form->createView()]),
+            $this->twig->render('person/register.html.twig', [
+                'form' => $form->createView(),
+                'pesel_decode_csrf_token_id' => DecodePeselController::CSRF_TOKEN_ID,
+            ]),
             $status,
         );
     }

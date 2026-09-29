@@ -32,3 +32,14 @@ person:
             created_at: Data rejestracji
     flash:
         registered: Osoba została zarejestrowana.
+    pesel_hint:
+        summary: 'Z numeru PESEL: %birth_date%, %gender%'
+        gender:
+            female: kobieta
+            male: mężczyzna
+        fill: Uzupełnij
+        mismatch: Data urodzenia lub płeć nie zgadzają się z numerem PESEL.
+
+pesel_decode:
+    invalid_request: Nieprawidłowe zapytanie.
+    invalid_csrf_token: Sesja wygasła. Odśwież stronę i spróbuj ponownie.
