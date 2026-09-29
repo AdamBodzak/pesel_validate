@@ -6,7 +6,7 @@ PHP = $(DOCKER_COMPOSE) exec php
 export HOST_UID := $(shell id -u)
 export HOST_GID := $(shell id -g)
 
-.PHONY: help build up down sh composer
+.PHONY: help build up down sh composer console
 
 help: ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -25,3 +25,6 @@ sh: ## Open a shell in the PHP container
 
 composer: ## Run Composer, e.g. make composer c="require symfony/uid"
 	$(PHP) composer $(c)
+
+console: ## Run Symfony console, e.g. make console c="about"
+	$(PHP) bin/console $(c)
