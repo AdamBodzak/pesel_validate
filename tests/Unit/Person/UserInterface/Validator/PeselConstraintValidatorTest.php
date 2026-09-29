@@ -6,8 +6,7 @@ namespace App\Tests\Unit\Person\UserInterface\Validator;
 
 use App\Person\UserInterface\Validator\PeselConstraint;
 use App\Person\UserInterface\Validator\PeselConstraintValidator;
-use DateTimeImmutable;
-use Psr\Clock\ClockInterface;
+use App\Tests\Double\Shared\FrozenClock;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -20,7 +19,7 @@ final class PeselConstraintValidatorTest extends ConstraintValidatorTestCase
 
     protected function createValidator(): ConstraintValidatorInterface
     {
-        return new PeselConstraintValidator($this->clockAt(self::TODAY));
+        return new PeselConstraintValidator(new FrozenClock(self::TODAY));
     }
 
     /**
@@ -81,7 +80,7 @@ final class PeselConstraintValidatorTest extends ConstraintValidatorTestCase
 
     public function testRaisesViolationForBirthDateInFuture(): void
     {
-        $this->validator = new PeselConstraintValidator($this->clockAt('2105-06-30 23:59:59'));
+        $this->validator = new PeselConstraintValidator(new FrozenClock('2105-06-30 23:59:59'));
         $this->validator->initialize($this->context);
 
         $this->validator->validate('05470145138', new PeselConstraint());
@@ -103,19 +102,5 @@ final class PeselConstraintValidatorTest extends ConstraintValidatorTestCase
         $this->expectException(UnexpectedTypeException::class);
 
         $this->validator->validate('44051401359', new NotBlank());
-    }
-
-    private function clockAt(string $dateTime): ClockInterface
-    {
-        return new class(new DateTimeImmutable($dateTime)) implements ClockInterface {
-            public function __construct(private readonly DateTimeImmutable $now)
-            {
-            }
-
-            public function now(): DateTimeImmutable
-            {
-                return $this->now;
-            }
-        };
     }
 }

@@ -26,6 +26,13 @@ final class PersonIdValueObjectTest extends TestCase
         self::assertSame($id->value(), $restored->value());
     }
 
+    public function testCastsToStringValue(): void
+    {
+        $id = PersonIdValueObject::generate();
+
+        self::assertSame($id->value(), (string) $id);
+    }
+
     /**
      * @dataProvider invalidIdentifierProvider
      */

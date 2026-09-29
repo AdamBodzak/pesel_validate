@@ -41,4 +41,12 @@ final readonly class PersonIdValueObject
     {
         return $this->uuid->equals($other->uuid);
     }
+
+    /**
+     * Required by Doctrine: identifier objects are cast to string to build the identity map key.
+     */
+    public function __toString(): string
+    {
+        return $this->value();
+    }
 }
