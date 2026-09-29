@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Person\Infrastructure\Doctrine\Type;
 
+use App\Person\Model\Exception\InvalidPersonIdException;
 use App\Person\Model\ValueObject\PersonIdValueObject;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\GuidType;
-use InvalidArgumentException;
 
 /**
  * Stored as native "uuid" column on PostgreSQL.
@@ -28,7 +28,7 @@ final class PersonIdDoctrineType extends GuidType
             throw InvalidType::new($value, self::NAME, ['null', PersonIdValueObject::class]);
         }
 
-        return $value->toString();
+        return $value->value();
     }
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?PersonIdValueObject
@@ -39,7 +39,7 @@ final class PersonIdDoctrineType extends GuidType
 
         try {
             return PersonIdValueObject::fromString((string) $value);
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidPersonIdException $exception) {
             throw ValueNotConvertible::new($value, self::NAME, null, $exception);
         }
     }

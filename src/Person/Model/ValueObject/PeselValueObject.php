@@ -10,7 +10,11 @@ use DateTimeImmutable;
 
 final readonly class PeselValueObject
 {
-    private const FORMAT_PATTERN = '/^\d{11}$/';
+    /**
+     * Exactly 11 ASCII digits. The "D" modifier makes "$" match only at the very end,
+     * otherwise a trailing new line would be accepted.
+     */
+    private const FORMAT_PATTERN = '/^\d{11}$/D';
     private const CHECKSUM_WEIGHTS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
     private const CHECKSUM_DIGIT_POSITION = 10;
     private const GENDER_DIGIT_POSITION = 9;
@@ -35,23 +39,23 @@ final readonly class PeselValueObject
     }
 
     /**
+     * Accepts only a clean PESEL - normalizing user input (e.g. removing spaces) is the responsibility of the caller.
+     *
      * @throws InvalidPeselException
      */
     public static function fromString(string $value): self
     {
-        $normalized = self::normalize($value);
-
-        if (1 !== preg_match(self::FORMAT_PATTERN, $normalized)) {
+        if (1 !== preg_match(self::FORMAT_PATTERN, $value)) {
             throw InvalidPeselException::invalidFormat();
         }
 
-        $digits = array_map('intval', str_split($normalized));
+        $digits = array_map('intval', str_split($value));
 
         if (!self::hasValidChecksum($digits)) {
             throw InvalidPeselException::invalidChecksum();
         }
 
-        return new self($normalized, self::decodeBirthDate($digits), self::decodeGender($digits));
+        return new self($value, self::decodeBirthDate($digits), self::decodeGender($digits));
     }
 
     public function value(): string
@@ -85,15 +89,6 @@ final readonly class PeselValueObject
     public function matchesGender(GenderEnum $gender): bool
     {
         return $this->gender === $gender;
-    }
-
-    /**
-     * Removes all whitespace, including Unicode spaces (e.g. non-breaking space from copy-paste).
-     * Invalid UTF-8 input makes preg_replace() return null - it is then treated as an invalid format.
-     */
-    private static function normalize(string $value): string
-    {
-        return preg_replace('/\s+/u', '', $value) ?? '';
     }
 
     /**

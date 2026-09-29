@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Person\Model\ValueObject;
 
+use App\Person\Model\Exception\InvalidPersonIdException;
 use App\Person\Model\ValueObject\PersonIdValueObject;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\Uuid;
 
 final class PersonIdValueObjectTest extends TestCase
 {
@@ -19,16 +20,29 @@ final class PersonIdValueObjectTest extends TestCase
     {
         $id = PersonIdValueObject::generate();
 
-        $restored = PersonIdValueObject::fromString($id->toString());
+        $restored = PersonIdValueObject::fromString($id->value());
 
         self::assertTrue($restored->equals($id));
-        self::assertSame($id->toString(), $restored->toString());
+        self::assertSame($id->value(), $restored->value());
     }
 
-    public function testRejectsInvalidUuid(): void
+    /**
+     * @dataProvider invalidIdentifierProvider
+     */
+    public function testRejectsIdentifierNotInRfc4122Format(string $value): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidPersonIdException::class);
 
-        PersonIdValueObject::fromString('not-a-uuid');
+        PersonIdValueObject::fromString($value);
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function invalidIdentifierProvider(): iterable
+    {
+        yield 'empty string' => [''];
+        yield 'random text' => ['not-a-uuid'];
+        yield 'valid UUID in Base58 format' => [Uuid::v6()->toBase58()];
     }
 }

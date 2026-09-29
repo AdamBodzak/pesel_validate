@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Person\Model\ValueObject;
 
+use App\Person\Model\Exception\InvalidPersonIdException;
 use Symfony\Component\Uid\Uuid;
 
 final readonly class PersonIdValueObject
@@ -18,14 +19,20 @@ final readonly class PersonIdValueObject
     }
 
     /**
-     * @throws \InvalidArgumentException when the value is not a valid UUID
+     * Accepts only the canonical RFC 4122 format (other formats supported by Uuid::fromString() are rejected).
+     *
+     * @throws InvalidPersonIdException
      */
     public static function fromString(string $value): self
     {
+        if (!Uuid::isValid($value)) {
+            throw InvalidPersonIdException::notRfc4122Uuid();
+        }
+
         return new self(Uuid::fromString($value));
     }
 
-    public function toString(): string
+    public function value(): string
     {
         return $this->uuid->toRfc4122();
     }

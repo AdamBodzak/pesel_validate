@@ -43,25 +43,6 @@ final class PeselValueObjectTest extends TestCase
     }
 
     /**
-     * @dataProvider whitespaceProvider
-     */
-    public function testRemovesWhitespaceBeforeValidation(string $value): void
-    {
-        self::assertSame('44051401359', PeselValueObject::fromString($value)->value());
-    }
-
-    /**
-     * @return iterable<string, array{string}>
-     */
-    public static function whitespaceProvider(): iterable
-    {
-        yield 'leading and trailing spaces' => ['  44051401359  '];
-        yield 'spaces between digits' => ['440 514 013 59'];
-        yield 'tab and new line' => ["\t44051401359\n"];
-        yield 'non-breaking space' => ["440514\u{00A0}01359"];
-    }
-
-    /**
      * @dataProvider invalidPeselProvider
      */
     public function testRejectsInvalidPesel(string $value, PeselErrorEnum $expectedError): void
@@ -85,6 +66,10 @@ final class PeselValueObjectTest extends TestCase
         yield 'too long' => ['440514013590', PeselErrorEnum::InvalidFormat];
         yield 'contains a letter' => ['4405140135a', PeselErrorEnum::InvalidFormat];
         yield 'contains a dash' => ['440514-01359', PeselErrorEnum::InvalidFormat];
+        yield 'leading and trailing spaces' => ['  44051401359  ', PeselErrorEnum::InvalidFormat];
+        yield 'spaces between digits' => ['440 514 013 59', PeselErrorEnum::InvalidFormat];
+        yield 'non-breaking space' => ["440514\u{00A0}01359", PeselErrorEnum::InvalidFormat];
+        yield 'trailing new line' => ["44051401359\n", PeselErrorEnum::InvalidFormat];
         yield 'non-ASCII digits' => ['４４０５１４０１３５９', PeselErrorEnum::InvalidFormat];
         yield 'invalid UTF-8' => ["4405140135\xFF", PeselErrorEnum::InvalidFormat];
 
@@ -129,11 +114,11 @@ final class PeselValueObjectTest extends TestCase
         self::assertFalse($pesel->matchesGender(GenderEnum::Female));
     }
 
-    public function testEqualsComparesNormalizedValue(): void
+    public function testEqualsComparesValue(): void
     {
         $pesel = PeselValueObject::fromString('44051401359');
 
-        self::assertTrue($pesel->equals(PeselValueObject::fromString(' 440514 01359 ')));
+        self::assertTrue($pesel->equals(PeselValueObject::fromString('44051401359')));
         self::assertFalse($pesel->equals(PeselValueObject::fromString('85831512348')));
     }
 }

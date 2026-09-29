@@ -33,7 +33,7 @@ final class PersonIdDoctrineTypeTest extends TestCase
         $databaseValue = $this->type->convertToDatabaseValue($id, $this->platform);
         $phpValue = $this->type->convertToPHPValue($databaseValue, $this->platform);
 
-        self::assertSame($id->toString(), $databaseValue);
+        self::assertSame($id->value(), $databaseValue);
         self::assertInstanceOf(PersonIdValueObject::class, $phpValue);
         self::assertTrue($phpValue->equals($id));
     }
