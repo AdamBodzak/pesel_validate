@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'person.register.title'|trans }} – {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="mx-auto max-w-xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h1 class="mb-6 text-2xl font-semibold">{{ 'person.register.title'|trans }}</h1>
+
+        {# novalidate: validation messages come from the server, in Polish and consistent with the domain rules #}
+        {{ form_start(form, {attr: {
+            novalidate: 'novalidate',
+            'x-data': '{ submitting: false }',
+            'x-on:submit': 'submitting = true',
+        }}) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.pesel) }}
+            {{ form_row(form.birthDate) }}
+            {{ form_row(form.gender) }}
+
+            <button
+                type="submit"
+                class="w-full rounded-md bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 disabled:cursor-not-allowed disabled:opacity-60"
+                x-bind:disabled="submitting"
+            >{{ 'person.register.submit'|trans }}</button>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

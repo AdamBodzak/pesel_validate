@@ -2,3 +2,33 @@ app:
     name: Walidator PESEL
     flash:
         close: Zamknij
+    nav:
+        label: Nawigacja główna
+        register: Rejestracja
+        list: Lista osób
+
+person:
+    register:
+        title: Rejestracja osoby
+        submit: Zapisz
+    form:
+        first_name: Imię
+        last_name: Nazwisko
+        pesel: PESEL
+        birth_date: Data urodzenia
+        gender: Płeć
+    gender:
+        female: Kobieta
+        male: Mężczyzna
+    list:
+        title: Zarejestrowane osoby
+        empty: Nie zarejestrowano jeszcze żadnej osoby.
+        column:
+            first_name: Imię
+            last_name: Nazwisko
+            pesel: PESEL
+            birth_date: Data urodzenia
+            gender: Płeć
+            created_at: Data rejestracji
+    flash:
+        registered: Osoba została zarejestrowana.

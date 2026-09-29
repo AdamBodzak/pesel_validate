@@ -1,0 +1,26 @@
+person:
+    first_name:
+        not_blank: Podaj imię.
+        too_short: Imię musi mieć co najmniej {{ limit }} znaki.
+        too_long: Imię może mieć najwyżej {{ limit }} znaków.
+        invalid: Imię może zawierać tylko litery oraz pojedyncze spacje, myślniki i apostrofy między nimi.
+    last_name:
+        not_blank: Podaj nazwisko.
+        too_short: Nazwisko musi mieć co najmniej {{ limit }} znaki.
+        too_long: Nazwisko może mieć najwyżej {{ limit }} znaków.
+        invalid: Nazwisko może zawierać tylko litery oraz pojedyncze spacje, myślniki i apostrofy między nimi.
+    pesel:
+        not_blank: Podaj numer PESEL.
+        invalid_format: Numer PESEL musi składać się z 11 cyfr.
+        invalid_checksum: Numer PESEL ma nieprawidłową cyfrę kontrolną.
+        invalid_birth_date: Numer PESEL zawiera nieistniejącą datę urodzenia.
+        birth_date_in_future: Numer PESEL wskazuje datę urodzenia z przyszłości.
+        already_registered: Osoba o tym numerze PESEL jest już zarejestrowana.
+    birth_date:
+        not_blank: Podaj datę urodzenia.
+        invalid: Podaj prawidłową datę urodzenia.
+        not_matching_pesel: Data urodzenia nie zgadza się z numerem PESEL.
+    gender:
+        not_blank: Wybierz płeć.
+        invalid: Wybierz prawidłową płeć.
+        not_matching_pesel: Płeć nie zgadza się z numerem PESEL.

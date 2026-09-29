@@ -25,5 +25,7 @@ services:
 
     App\Person\Model\Repository\PersonRepositoryInterface: '@App\Person\Infrastructure\Doctrine\Repository\DoctrinePersonRepository'
 
+    App\Person\Application\ListPersons\PersonListQueryInterface: '@App\Person\Infrastructure\Doctrine\Query\DbalPersonListQuery'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

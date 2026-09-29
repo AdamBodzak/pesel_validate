@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'person.list.title'|trans }} – {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h1 class="mb-6 text-2xl font-semibold">{{ 'person.list.title'|trans }}</h1>
+
+        {% if persons is empty %}
+            <p class="text-slate-500">{{ 'person.list.empty'|trans }}</p>
+        {% else %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-left text-sm">
+                    <thead class="border-b border-slate-200 text-slate-500">
+                        <tr>
+                            <th scope="col" class="py-2 pr-4 font-medium">{{ 'person.list.column.first_name'|trans }}</th>
+                            <th scope="col" class="py-2 pr-4 font-medium">{{ 'person.list.column.last_name'|trans }}</th>
+                            <th scope="col" class="py-2 pr-4 font-medium">{{ 'person.list.column.pesel'|trans }}</th>
+                            <th scope="col" class="py-2 pr-4 font-medium">{{ 'person.list.column.birth_date'|trans }}</th>
+                            <th scope="col" class="py-2 pr-4 font-medium">{{ 'person.list.column.gender'|trans }}</th>
+                            <th scope="col" class="py-2 font-medium">{{ 'person.list.column.created_at'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for person in persons %}
+                            <tr>
+                                <td class="py-2 pr-4">{{ person.firstName }}</td>
+                                <td class="py-2 pr-4">{{ person.lastName }}</td>
+                                <td class="py-2 pr-4 font-mono">{{ person.maskedPesel }}</td>
+                                <td class="py-2 pr-4">{{ person.birthDate|date('d.m.Y') }}</td>
+                                <td class="py-2 pr-4">{{ person.genderLabel|trans }}</td>
+                                <td class="py-2">{{ person.createdAt|date('d.m.Y H:i') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

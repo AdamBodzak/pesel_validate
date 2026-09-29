@@ -1,0 +1,47 @@
+{# Minimal Tailwind CSS form theme - only the blocks used by the application forms are customized #}
+{% use 'form_div_layout.html.twig' %}
+
+{%- block form_row -%}
+    <div class="mb-5">
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{%- block form_label -%}
+    {%- if label_attr.class is not defined -%}
+        {%- set label_attr = label_attr|merge({class: 'mb-1 block text-sm font-medium text-slate-700'}) -%}
+    {%- endif -%}
+    {{- parent() -}}
+{%- endblock form_label -%}
+
+{%- block form_widget_simple -%}
+    {%- set state_class = errors|length > 0
+        ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
+        : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-200' -%}
+    {%- set attr = attr|merge({class: ('block w-full rounded-md border bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 ' ~ state_class ~ ' ' ~ attr.class|default(''))|trim}) -%}
+    {{- parent() -}}
+{%- endblock form_widget_simple -%}
+
+{%- block choice_widget_expanded -%}
+    {%- set attr = attr|merge({class: ('flex gap-6 ' ~ attr.class|default(''))|trim}) -%}
+    <div {{ block('widget_container_attributes') }}>
+        {%- for child in form %}
+            <div class="flex items-center gap-2">
+                {{- form_widget(child, {attr: {class: 'h-4 w-4 accent-indigo-600'}}) -}}
+                {{- form_label(child, null, {translation_domain: choice_translation_domain, label_attr: {class: 'text-sm text-slate-700'}}) -}}
+            </div>
+        {% endfor -%}
+    </div>
+{%- endblock choice_widget_expanded -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul class="mt-1 space-y-1 text-sm text-red-600">
+            {%- for error in errors -%}
+                <li>{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock form_errors -%}

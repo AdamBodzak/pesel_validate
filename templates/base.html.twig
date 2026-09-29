@@ -14,8 +14,18 @@
     </head>
     <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
         <header class="border-b border-slate-200 bg-white">
-            <div class="mx-auto max-w-4xl px-4 py-4">
+            <div class="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 px-4 py-4">
                 <span class="text-lg font-semibold">{{ 'app.name'|trans }}</span>
+                {% set current_route = app.request.attributes.get('_route') %}
+                <nav class="flex gap-4 text-sm font-medium" aria-label="{{ 'app.nav.label'|trans }}">
+                    {% for route, label in {person_register: 'app.nav.register', person_list: 'app.nav.list'} %}
+                        <a
+                            href="{{ path(route) }}"
+                            class="{{ route == current_route ? 'text-indigo-600' : 'text-slate-600 hover:text-slate-900' }}"
+                            {% if route == current_route %}aria-current="page"{% endif %}
+                        >{{ label|trans }}</a>
+                    {% endfor %}
+                </nav>
             </div>
         </header>
 
