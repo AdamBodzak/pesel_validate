@@ -1,0 +1,11 @@
+# Claude Code
+CLAUDE.md
+.claude/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
