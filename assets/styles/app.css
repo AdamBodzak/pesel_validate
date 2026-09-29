@@ -1,0 +1,8 @@
+/*
+ * Tailwind CSS v4. Class detection is limited to files that can contain Tailwind classes.
+ * Paths are relative to this file.
+ */
+@import "tailwindcss" source(none);
+
+@source "../../templates";
+@source "..";

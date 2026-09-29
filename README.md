@@ -8,10 +8,10 @@ Stack: PHP 8.2, Symfony 5.4, PostgreSQL, Docker.
 
 ## Konfiguracja Docker Compose
 
-| Plik                    | Zawartość                                                       |
-|-------------------------|-----------------------------------------------------------------|
-| `compose.yaml`          | usługi aplikacji: `php`, `nginx`, `database`                    |
-| `compose.override.yaml` | tylko dev: Adminer oraz port bazy (`5432`) wystawiony na hosta  |
+| Plik                    | Zawartość |
+|-------------------------|-----------|
+| `compose.yaml`          | usługi aplikacji: `php`, `nginx`, `database` |
+| `compose.override.yaml` | tylko dev: Adminer, port bazy (`5432`) wystawiony na hosta oraz Node (przebudowa assetów w trybie watch) |
 
 `docker compose` (a więc i `make up`) automatycznie dołącza `compose.override.yaml`, dlatego lokalnie narzędzia deweloperskie działają bez dodatkowych flag.
 

@@ -13,3 +13,15 @@ services:
       - "${ADMINER_PORT:-8081}:8080"
     depends_on:
       - database
+
+  node:
+    image: node:24-alpine
+    # Run as the host user so generated files (node_modules, public/build) keep host ownership
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    working_dir: /var/www/app
+    environment:
+      # An arbitrary UID has no writable home directory - keep the npm cache in /tmp
+      NPM_CONFIG_CACHE: /tmp/.npm
+    volumes:
+      - ./:/var/www/app
+    command: sh -c "npm install && npm run watch"
