@@ -20,5 +20,7 @@ services:
             - '../src/*/Model/'
             - '../src/Kernel.php'
 
+    Psr\Clock\ClockInterface: '@App\Shared\Infrastructure\Clock\SystemClock'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
